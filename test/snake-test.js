@@ -1,6 +1,7 @@
 var chai = require('chai')
 var assert = chai.assert
 var Snake = require ('../lib/snake.js')
+var Segment = require('../lib/Segment.js');
 
 
 describe('snake', function(){
@@ -43,9 +44,24 @@ it('should place the neck at the second index and the head should be at the firs
   assert.equal(snake.neck.x, expectedX)
 });
 
-it('should instantiate the head with an endGame property defaulting to false', function(){
+it('should instantiate the head with an endGame property defaulting to false', function() {
   assert.equal(snake.hasEaten, false)
 });
 
+it('should take a new segment and place in the direction of snake movement', function() {
+  var directionRequest = 'left';
+  var cellSize = 10;
+  var canvasDim = 300;
+  var newSeg = new Segment({width: 10, height: 10})
+  newSeg.x = 10;
+  newSeg.y = 10;
+  var expectedNewSeg = new Segment({width: 10, height: 10})
+  expectedNewSeg.x = 20;
+  expectedNewSeg.y = 10;
+  expectedNewSeg.endGame = false;
+    snake.head = newSeg;
+  snake.move('right', 10, 300);
+  assert.deepEqual(snake.head, expectedNewSeg)
+});
 
 });
