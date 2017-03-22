@@ -1,0 +1,1 @@
+require('../lib/Snake.js')
