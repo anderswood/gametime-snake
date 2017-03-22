@@ -44,6 +44,16 @@ it('should place the neck at the second index and the head should be at the firs
   assert.equal(snake.neck.x, expectedX)
 });
 
+it('should genereate the x & y position for the next head position', function(){
+  directionRequest = 'right';
+  var expectedNewPos = snake.segments[snake.segments.length-1]
+   = {x: 10; y: 10}
+  snake.head = {x}
+  snake.getNextPosition();
+  // var expectedX = snake.segments[snake.segments.length-1].x
+  assert.equal(snake.nextPosiiton.x, expectedX)
+});
+
 it('should instantiate the head with an endGame property defaulting to false', function() {
   assert.equal(snake.hasEaten, false)
 });
