@@ -49,6 +49,7 @@ it('should instantiate the head with an endGame property defaulting to false', f
 });
 
 it('should take a new segment and place in the direction of snake movement', function() {
+  var snake = new Snake()
   var directionRequest = 'left';
   var cellSize = 10;
   var canvasDim = 300;
@@ -59,9 +60,25 @@ it('should take a new segment and place in the direction of snake movement', fun
   expectedNewSeg.x = 20;
   expectedNewSeg.y = 10;
   expectedNewSeg.endGame = false;
-    snake.head = newSeg;
+  snake.head = newSeg;
   snake.move('right', 10, 300);
-  assert.deepEqual(snake.head, expectedNewSeg)
+  assert.equal(snake.head, expectedNewSeg)
 });
+
+it('should detect when a segment enters the coordiantes of another segment', function() {
+    var snake2 = new Snake();
+    snake2.segments = new Segment(10,10);
+    snake2.nextPosition.x = 10;
+    snake2.nextPosition.y = 10 ;   snake2.detectSelfCollision();
+    assert.equal(snake2.endGame, true);
+
+});
+
+  // establish the coordinates of two snake segments
+  // call function
+  // created expected coordinates of the new position of snake segments that intersect
+  //
+
+
 
 });
