@@ -3,18 +3,30 @@
 <head>
   <meta charset="utf-8">
   <title>Game Time</title>
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
   <link rel="stylesheet" href="/lib/game.css">
 </head>
 <body>
   <section id='container'>
     <article id='game-container'>
-      <canvas id="game" width="300" height="300"></canvas>
+      <div id='title-container'>
+        <h1>SNAKE</h1>
+      </div>
+      <div id='canvas-container'>
+        <canvas id="game" width="300" height="300"></canvas>
+        <div id='new-game-box'>
+          <button id='new-game-button1'>NEW GAME</button>
+        </div>
+        <div id='end-game-box'>
+          <h2 id='gameover-text'>GAME OVER</h2>
+          <button id='new-game-button2'>NEW GAME</button>
+        </div>
+      </div>
       <div id='score-container'>
-        <h2>SCORE: <span id='active-score'>30</span></h2>
-        <h2>LEVEL: <span id='active-level'>2</span></h2>
+        <h2>SCORE: <span id='active-score'></span></h2>
       </div>
     </article>
-    <article id='highscore-container'>
+    <!-- <article id='highscore-container'>
       <h1>HIGH SCORE</h1>
       <table>
         <tbody>
@@ -35,7 +47,7 @@
           </tr>
         </tbody>
       </table>
-    </article>
+    </article> -->
   </section>
   <script src="main.bundle.js"></script>
 </body>
