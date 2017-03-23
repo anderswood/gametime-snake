@@ -44,35 +44,68 @@ it('should place the neck at the second index and the head should be at the firs
   assert.equal(snake.neck.x, expectedX)
 });
 
-it('should genereate the x & y position for the next head position', function(){
-  directionRequest = 'right';
-  var expectedNewPos = snake.segments[snake.segments.length-1]
-   = {x: 10; y: 10}
-  snake.head = {x}
-  snake.getNextPosition();
-  // var expectedX = snake.segments[snake.segments.length-1].x
-  assert.equal(snake.nextPosiiton.x, expectedX)
-});
+// it('getNextPosition should genereate the x & y position for the next head position', function(){
+//   directionRequest = 'right';
+//   var expectedNewPos = snake.segments[snake.segments.length-1]
+//    = {x: 10; y: 10}
+//   snake.head = {x}
+//   snake.getNextPosition();
+//   // var expectedX = snake.segments[snake.segments.length-1].x
+//   assert.equal(snake.nextPosiiton.x, expectedX)
+// });
 
 it('should instantiate the head with an endGame property defaulting to false', function() {
   assert.equal(snake.hasEaten, false)
 });
 
-it('should take a new segment and place in the direction of snake movement', function() {
+//does the move function increase the snake laneght
+
+it('Move should take a new segment and place in the direction of snake movement', function() {
+  // var snake = new Snake()
+  // snake.hasEaten = true;
+  var segment = new Segment({x: 10, y: 10, width: 10, height: 10})
+  snake.move()
+  var expNextPosition = new Segment({x: 20, y: 20, width: 10, height: 10})
+  assert.equal(segment, expNextPosition)
+
+
+
+//to get expNextPosition
+  //take snake segment, increment "head".x by 10
   var snake = new Snake()
-  var directionRequest = 'left';
-  var cellSize = 10;
-  var canvasDim = 300;
-  var newSeg = new Segment({width: 10, height: 10})
-  newSeg.x = 10;
-  newSeg.y = 10;
-  var expectedNewSeg = new Segment({width: 10, height: 10})
-  expectedNewSeg.x = 20;
-  expectedNewSeg.y = 10;
-  expectedNewSeg.endGame = false;
-  snake.head = newSeg;
-  snake.move('right', 10, 300);
-  assert.equal(snake.head, expectedNewSeg)
+  snake.hasEaten = true;
+  var snakeHead = snake.segments[snake.segments.length - 1]
+  snakeHead.x += 10;
+  snake.nextPosition.x = snakeHead.x
+
+//to get segment
+  //take snake and run the move function
+
+
+
+  // var expectedNewSeg = ({})
+
+  // var snakeHeadBefore = snake.segments[snake.segments.length - 1]
+  // expNextPosition.x = snakeHeadBefore.x + 10
+  //
+  //
+  // //the position to the right of the snake's head
+  //
+  // expectedNewSeg.y = 10;
+  //
+  //
+  //
+  // var directionRequest = 'left';
+  // var cellSize = 10;
+  // var canvasDim = 300;
+  // var newSeg = new Segment({width: 10, height: 10})
+  // expectedNewSeg.endGame = false;
+  // snake.head = newSeg;
+  //
+  snake.move();
+  var snakeHeadAfter = snake.segments[snake.segments.length - 1]
+
+  assert.deepEqual(snakeHead.x, snakeHeadAfter.x)
 });
 
 it('should detect when a segment enters the coordiantes of another segment', function() {
@@ -83,6 +116,8 @@ it('should detect when a segment enters the coordiantes of another segment', fun
     assert.equal(snake2.endGame, true);
 
 });
+
+//at game end test
 
   // establish the coordinates of two snake segments
   // call function
