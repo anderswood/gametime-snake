@@ -1,7 +1,6 @@
 var chai = require('chai');
 var assert = chai.assert;
-var Snake = require ('../lib/snake.js');
-var Segment = require('../lib/Segment.js');
+var Snake = require ('../lib/Snake.js');
 
 
 describe('snake', function() {
@@ -37,8 +36,6 @@ describe('snake', function() {
     assert.equal(snake.segments[1].color, "#F9FD40");
   });
 
-  // Draw...feature testing?
-
   it('should place the neck at the second index and the head should be at the first index', function() {
     snake.assignBodyParts();
     var expectedX = snake.segments[snake.segments.length-1].x;
@@ -46,93 +43,60 @@ describe('snake', function() {
     assert.equal(snake.neck.x, expectedX);
   });
 
-// it('getNextPosition should genereate the x & y position for the next head position', function(){
-//   directionRequest = 'right';
-//   var expectedNewPos = snake.segments[snake.segments.length-1]
-//    = {x: 10; y: 10}
-//   snake.head = {x}
-//   snake.getNextPosition();
-//   // var expectedX = snake.segments[snake.segments.length-1].x
-//   assert.equal(snake.nextPosiiton.x, expectedX)
-// });
 
-  it('should instantiate the head with an endGame property defaulting to false', function() {
+  it('should instantiate a hungry snake', function() {
     assert.equal(snake.hasEaten, false);
   });
 
-//does the move function increase the snake laneght
-//
-// it('Move should take a new segment and place in the direction of snake movement', function() {
-//   // var snake = new Snake()
-//   // snake.hasEaten = true;
-//   var segment = new Segment({x: 10, y: 10, width: 10, height: 10})
-//   snake.move()
-//   var expNextPosition = new Segment({x: 20, y: 20, width: 10, height: 10})
-//   assert.equal(segment, expNextPosition)
-//
-//
-//
-// //to get expNextPosition
-//   //take snake segment, increment "head".x by 10
-//   var snake = new Snake()
-//   snake.hasEaten = true;
-//   var snakeHead = snake.segments[snake.segments.length - 1]
-//   snakeHead.x += 10;
-//   snake.nextPosition.x = snakeHead.x
-//
-//
-//
-// ************************* start ^^
+  it('should have intitial coordinsate of x = 0 and y = 30 move and x y coords change', function() {
+    assert.equal(snake.segments[initialLength-1].x, 0);
+    assert.equal(snake.segments[initialLength-1].y, 30);
+  })
 
+  it('should move and x y coords should increment', function() {
+    snake.moveRequest('right', cellSize)
+    snake.move()
+    snake.moveRequest('right', cellSize)
+    snake.move()
+    assert.equal(snake.segments[initialLength-1].x, 20);
+    assert.equal(snake.segments[initialLength-1].y, 30);
+  })
 
+  it('should not allow the player to turn the snake on itself', function() {
+    snake.moveRequest('left', cellSize)
+    assert.equal(snake.direction, 'right');
+  })
 
-//to get segment
-  //take snake and run the move function
+  it('should endGame when a segment hits a wall', function() {
+    snake.moveRequest('up', cellSize)
+    snake.move()
+    snake.moveRequest('up', cellSize)
+    snake.move()
+    snake.moveRequest('up', cellSize)
+    snake.move()
+    snake.moveRequest('up', cellSize)
+    snake.move()
 
-
-
-  // var expectedNewSeg = ({})
-
-  // var snakeHeadBefore = snake.segments[snake.segments.length - 1]
-  // expNextPosition.x = snakeHeadBefore.x + 10
-  //
-  //
-  // //the position to the right of the snake's head
-  //
-  // expectedNewSeg.y = 10;
-  //
-  //
-  //
-  // var directionRequest = 'left';
-  // var cellSize = 10;
-  // var canvasDim = 300;
-  // var newSeg = new Segment({width: 10, height: 10})
-  // expectedNewSeg.endGame = false;
-  // snake.head = newSeg;
-  //
-//   snake.move();
-//   var snakeHeadAfter = snake.segments[snake.segments.length - 1]
-//
-//   assert.deepEqual(snakeHead.x, snakeHeadAfter.x)
-// });
-
-  it('should detect when a segment enters the coordiantes of another segment', function() {
-    var snake = new Snake();
-
-    snake.segments = new Segment(10, 10);
-    snake.nextPosition.x = 10;
-    snake.nextPosition.y = 10 ;   snake.detectSelfCollision();
     assert.equal(snake.endGame, true);
+  })
 
-  });
+  it('should endGame when a segment enters the coords of another segment', function() {
+    snake = new Snake()
+    snake.buildSnake(initialLength, cellSize);
+    assert.equal(snake.endGame, false);
 
-//at game end test
+    snake.moveRequest('right', cellSize)
+    snake.move()
+    snake.moveRequest('right', cellSize)
+    snake.move()
+    snake.moveRequest('down', cellSize)
+    snake.move()
+    snake.moveRequest('left', cellSize)
+    snake.move()
+    snake.moveRequest('up', cellSize)
+    snake.move()
 
-  // establish the coordinates of two snake segments
-  // call function
-  // created expected coordinates of the new position of snake segments that intersect
-  //
-
-
+    assert.equal(snake.endGame, true);
+  })
 
 });
