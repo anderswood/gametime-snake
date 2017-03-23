@@ -59,24 +59,30 @@ it('should instantiate the head with an endGame property defaulting to false', f
 });
 
 //does the move function increase the snake laneght
+//
+// it('Move should take a new segment and place in the direction of snake movement', function() {
+//   // var snake = new Snake()
+//   // snake.hasEaten = true;
+//   var segment = new Segment({x: 10, y: 10, width: 10, height: 10})
+//   snake.move()
+//   var expNextPosition = new Segment({x: 20, y: 20, width: 10, height: 10})
+//   assert.equal(segment, expNextPosition)
+//
+//
+//
+// //to get expNextPosition
+//   //take snake segment, increment "head".x by 10
+//   var snake = new Snake()
+//   snake.hasEaten = true;
+//   var snakeHead = snake.segments[snake.segments.length - 1]
+//   snakeHead.x += 10;
+//   snake.nextPosition.x = snakeHead.x
+//
+//
+//
+// ************************* start ^^
 
-it('Move should take a new segment and place in the direction of snake movement', function() {
-  // var snake = new Snake()
-  // snake.hasEaten = true;
-  var segment = new Segment({x: 10, y: 10, width: 10, height: 10})
-  snake.move()
-  var expNextPosition = new Segment({x: 20, y: 20, width: 10, height: 10})
-  assert.equal(segment, expNextPosition)
 
-
-
-//to get expNextPosition
-  //take snake segment, increment "head".x by 10
-  var snake = new Snake()
-  snake.hasEaten = true;
-  var snakeHead = snake.segments[snake.segments.length - 1]
-  snakeHead.x += 10;
-  snake.nextPosition.x = snakeHead.x
 
 //to get segment
   //take snake and run the move function
