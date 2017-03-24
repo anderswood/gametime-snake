@@ -2,7 +2,7 @@ var chai = require('chai')
 var assert = chai.assert;
 // var Snake = require ('../lib/snake.js');
 // var Segment = require('../lib/Segment.js');
-var Food = require('../lib/food.js');
+var Food = require('../lib/Food.js');
 
 
 describe('food', function() {

@@ -2,7 +2,7 @@
 var chai = require('chai');
 var assert = chai.assert;
 var Segment = require ('../lib/Segment.js');
-var Snake = require ('../lib/snake.js');
+var Snake = require ('../lib/Snake.js');
 
 
 describe('segment', function() {
@@ -28,17 +28,5 @@ describe('segment', function() {
     assert.equal(nextPosition.x, expected.x);
     assert.equal(nextPosition.y, expected.y);
   });
-
-  it('should avoid contact with thy self', function() {
-    var nextPositionRequest = {x: 10, y: 30};
-
-    nextPositionRequest.x = segment.x;
-    nextPositionRequest.y = segment.y;
-    var direction = 'right';
-
-    segment.detectTurnOnSelf(nextPositionRequest, 'left', direction);
-    assert.equal(snake.neck, direction);
-  });
-
 
 });
