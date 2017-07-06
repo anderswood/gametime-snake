@@ -61,9 +61,219 @@
 	}
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */,
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Segment = __webpack_require__(2);
+	var Food = __webpack_require__(3);
+
+	const COLOR_BLACK = '#000000';
+	const COLOR_YELLOW = '#F9FD40';
+	const COLOR_RED = '#B12527';
+	const COLOR_GREEN = '#64ff64';
+	const canvasDim = { xLeft: 0, xRight: 300, yTop: 0, yBottom: 300 };
+
+	class Snake {
+	  constructor(initialLength, cellSize) {
+	    this.segments = [];
+	    this.neck = {};
+	    this.head = {};
+	    this.direction = 'right';
+	    this.nextPosition;
+	    this.meal = new Food({
+	      width: cellSize,
+	      height: cellSize,
+	      color: COLOR_GREEN,
+	      canvasDim });
+	    this.hasEaten = false;
+	    this.endGame = false;
+	    this.buildSnake(initialLength, cellSize);
+	  }
+
+	  buildSnake(initialLength, cellSize) {
+	    for (var i = 0; i < initialLength; i++) {
+
+	      this.segments.push(new Segment({
+	        x: 0,
+	        y: 30,
+	        width: cellSize,
+	        height: cellSize,
+	        color: ''
+	      }));
+	    }
+	  }
+
+	  draw(context) {
+	    this.segments.forEach(function (snakeBit) {
+	      snakeBit.draw(context);
+	    });
+	  }
+
+	  moveRequest(directionRequest, cellSize) {
+	    this.assignBodyParts();
+	    this.getNextPosition(directionRequest);
+	    this.detectSelfCollision();
+	    this.detectWallCollision(this.nextPosition, canvasDim);
+	    this.detectFoodCollision(this.nextPosition, cellSize, canvasDim);
+	  }
+
+	  assignBodyParts() {
+	    this.neck = this.segments[this.segments.length - 2];
+	    this.head = this.segments[this.segments.length - 1];
+	  }
+
+	  getNextPosition(directionRequest) {
+	    var nextPositionRequest = this.head.nextPosition(directionRequest);
+
+	    this.direction = this.neck.detectTurnOnSelf(nextPositionRequest, directionRequest, this.direction);
+	    this.nextPosition = this.head.nextPosition(this.direction);
+	  }
+
+	  detectSelfCollision() {
+	    this.segments.forEach(function (snakeBit, i) {
+	      if (i != this.segments.length - 1 && this.nextPosition.x === snakeBit.x && this.nextPosition.y === snakeBit.y) {
+	        this.endGame = true;
+	        return;
+	      }
+	    }.bind(this));
+	  }
+
+	  detectWallCollision(nextPosition) {
+	    if (nextPosition.x < canvasDim.xLeft || nextPosition.x >= canvasDim.xRight || nextPosition.y < canvasDim.yTop || nextPosition.y >= canvasDim.yBottom) {
+	      this.endGame = true;
+	    }
+	  }
+
+	  detectFoodCollision(nextPosition, cellSize) {
+	    if (this.meal.x === this.nextPosition.x && this.meal.y === this.nextPosition.y) {
+	      this.hasEaten = true;
+	      this.meal = new Food({
+	        width: cellSize,
+	        height: cellSize,
+	        color: COLOR_GREEN,
+	        canvasDim
+	      });
+	    }
+	  }
+
+	  move() {
+	    if (this.hasEaten) {
+	      this.hasEaten = false;
+	    } else {
+	      this.segments.shift(); //remove first object in array (tail)
+	    }
+	    var newSeg = new Segment({
+	      x: this.nextPosition.x,
+	      y: this.nextPosition.y,
+	      width: this.head.width,
+	      height: this.head.height });
+
+	    this.segments.push(newSeg);
+	    this.colorize();
+	  }
+
+	  colorize() {
+	    var colors = [COLOR_BLACK, COLOR_YELLOW, COLOR_BLACK, COLOR_BLACK, COLOR_YELLOW, COLOR_RED, COLOR_RED, COLOR_YELLOW];
+
+	    for (var i = 0; i < this.segments.length; i++) {
+	      this.segments[i].color = colors[i % 8];
+	    }
+	  }
+
+	}
+
+	module.exports = Snake;
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	
+	class Segment {
+	  constructor(options) {
+	    this.x = options.x;
+	    this.y = options.y;
+	    this.width = options.width;
+	    this.height = options.height;
+	    this.color = options.color;
+	  }
+
+	  draw(context) {
+	    context.fillStyle = this.color;
+	    context.fillRect(this.x, this.y, this.width, this.height);
+	    return this;
+	  }
+
+	  position() {
+	    var position = { 'x': this.x, 'y': this.y };
+
+	    return position;
+	  }
+
+	  nextPosition(dx) {
+	    var nextPosition = '';
+
+	    switch (dx) {
+	      case 'left':
+	        nextPosition = { 'x': this.x - this.width, 'y': this.y };break;
+	      case 'up':
+	        nextPosition = { 'x': this.x, 'y': this.y - this.height };break;
+	      case 'right':
+	        nextPosition = { 'x': this.x + this.width, 'y': this.y };break;
+	      case 'down':
+	        nextPosition = { 'x': this.x, 'y': this.y + this.height };break;
+	    }
+	    return nextPosition;
+	  }
+
+	  detectTurnOnSelf(nextPositionRequest, directionRequest, direction) {
+	    if (this.x === nextPositionRequest.x && this.y === nextPositionRequest.y) {
+	      return direction; //directionRequest rejected
+	    }
+	    return directionRequest; // directionRequest accepted
+	  }
+
+	}
+
+	module.exports = Segment;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	
+	var randomCoords;
+
+	class Food {
+	  constructor(options) {
+	    this.x = this.generateRandomCoords(options).x;
+	    this.y = this.generateRandomCoords(options).y;
+	    this.width = options.width;
+	    this.height = options.height;
+	    this.color = options.color;
+	  }
+
+	  generateRandomCoords(options) {
+	    var canvasWidth = options.canvasDim.xRight - options.canvasDim.xLeft;
+	    var canvasHeight = options.canvasDim.yBottom - options.canvasDim.yTop;
+
+	    randomCoords = { 'x': '', 'y': '' };
+	    randomCoords.x = Math.floor(Math.random() * canvasWidth / options.width) * options.width;
+	    randomCoords.y = Math.floor(Math.random() * canvasHeight / options.height) * options.height;
+	    return randomCoords;
+	  }
+
+	  draw(context) {
+	    context.fillStyle = this.color;
+	    context.fillRect(this.x, this.y, this.width, this.height);
+	    return this;
+	  }
+
+	}
+
+	module.exports = Food;
+
+/***/ },
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -451,9 +661,9 @@
 
 /***/ },
 /* 12 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	
+	__webpack_require__(1);
 
 /***/ },
 /* 13 */
